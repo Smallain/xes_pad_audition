@@ -22,14 +22,22 @@ SELECT audition_info.city_id,
        class.venue_name,
        audition_info.course_no,
        audition_info.cuc_date,
-       audition_info.audition_pay_end_date,
-       audition_info.stuid,
-       audition_info.student_type,
-       audition_info.fina_class_id,
-       audition_info.fina_student_id,
-       audition_info.fina_reg_class_no,
-       audition_info.fina_create_date
-FROM test.xes_pad_audition_info audition_info
+       audition_info.student_type
+FROM (
+SELECT DISTINCT city_id,
+        city_name,
+        student_id,
+        cla_id,
+        class_type,
+        class_type_name,
+        schl_year,
+        term_id,
+        term_name,
+        course_no,
+        cuc_date,
+        student_type
+FROM test.xes_pad_audition_info
+) audition_info
 JOIN dw_data.dw_class class ON audition_info.city_id = class.city_id
 AND audition_info.cla_id = class.cla_id;
 
@@ -37,9 +45,9 @@ AND audition_info.cla_id = class.cla_id;
 
 --最终处理为dm_newbi.xes_pad_audition表的下钻一层表
 
-DROP TABLE IF EXISTS dm_newbi.xes_pad_audition_sub_one;
+DROP TABLE IF EXISTS otemp.xes_pad_audition_sub_one;
 
-CREATE TABLE IF NOT EXISTS dm_newbi.xes_pad_audition_sub_one AS
+CREATE TABLE IF NOT EXISTS otemp.xes_pad_audition_sub_one AS
 SELECT one_info.city_id,
        one_info.city_name,
        one_info.schl_year,

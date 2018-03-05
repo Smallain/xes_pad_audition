@@ -1,8 +1,8 @@
 --在下钻一层表的基础上调整数据
 
-DROP TABLE IF EXISTS dm_newbi.xes_pad_audition_sub_two_info;
+DROP TABLE IF EXISTS test.xes_pad_audition_sub_two_info;
 
-CREATE TABLE IF NOT EXISTS dm_newbi.xes_pad_audition_sub_two_info AS
+CREATE TABLE IF NOT EXISTS test.xes_pad_audition_sub_two_info AS
 SELECT one_info.city_id,
        one_info.city_name,
        audition.student_id,
@@ -34,9 +34,9 @@ and one_info.term_id = audition.term and one_info.course_no = audition.course_no
 
 
 --最终处理为dm_newbi.xes_pad_audition表的下钻二层表
-DROP TABLE IF EXISTS dm_newbi.xes_pad_audition_sub_two;
+DROP TABLE IF EXISTS otemp.xes_pad_audition_sub_two;
 
-CREATE TABLE IF NOT EXISTS dm_newbi.xes_pad_audition_sub_two AS
+CREATE TABLE IF NOT EXISTS otemp.xes_pad_audition_sub_two AS
 SELECT sub_two.city_id,
        sub_two.city_name,
        sub_two.student_id,
@@ -61,7 +61,7 @@ SELECT sub_two.city_id,
        regexp_replace(emp.emp_name,'[0-9,a-z,A-Z,（,）,(,)]','') AS emp_name,
        sub_two.create_time,
        curr.cuc_date
-FROM dm_newbi.xes_pad_audition_sub_two_info sub_two
+FROM test.xes_pad_audition_sub_two_info sub_two
 JOIN odata.ods_bn_tb_employee emp ON sub_two.city_id = emp.city_id
 AND sub_two.creator_id = emp.emp_id
 JOIN odata.ods_bn_tb_student stu ON sub_two.city_id = stu.city_id
